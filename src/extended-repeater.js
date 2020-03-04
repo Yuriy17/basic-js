@@ -19,5 +19,5 @@ module.exports = function repeater(str, options) {
     if (!options.separator) options.separator = "+";
     if (i !== options.repeatTimes - 1) res += options.separator;
   }
-  return res;
+  return res; 
 };
