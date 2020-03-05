@@ -1,61 +1,89 @@
-/* class VigenereCipheringMachine {
-
-    constructor(direct){
-        this.direct = direct === false ? false : true; 
-    }
-
-    encrypt(message, key) {
-        if(!message || !key) throw Error;
-
-
-    }
-
-    decrypt(encryptedMessage, key) {
-        if(!encryptedMessage || !key) throw Error;
-        console.log(encryptedMessage, key);
-        
-        	    var output = "";
-	    for (var i = 0, j = 0; i < encryptedMessage.length; i++) {
-	    	var c = encryptedMessage.charCodeAt(i);
-	    	if (this.isUppercase(c)) {
-	    		output += String.fromCharCode((c - 65 + key.charCodeAt(j % key.length)) % 26 + 65);
-                
-	    		j++;
-	    	} else if (this.isLowercase(c)) {
-	    		output += String.fromCharCode((c - 97 + key.charCodeAt(j % key.length)) % 26 + 97);
-	    		j++;
-	    	} else {
-	    		output += encryptedMessage.charAt(i);
-	    	}
-	    }
-	    return output;
-
-    }
-
-    // Tests whether the specified character code is an uppercase letter.
-    isUppercase(c) {
-    	return 65 <= c && c <= 90;  // 65 is character code for 'A'. 90 is 'Z'.
-    }
-
-    // Tests whether the specified character code is a lowercase letter.
-    isLowercase(c) {
-    	return 97 <= c && c <= 122;  // 97 is character code for 'a'. 122 is 'z'.
-    }
-}
-
-module.exports = VigenereCipheringMachine;
- */
 
 class VigenereCipheringMachine {
-  encrypt() {
-    throw "Not implemented";
-    // remove line with error and write your code here
+  constructor(bool = true) {
+    this.bool = bool;
   }
 
-  decrypt() {
-    throw "Not implemented";
-    // remove line with error and write your code here
+  encrypt(message, key) {
+    if (message === undefined || key === undefined) {
+      throw new Error("Error");
+    }
+    let resultArr = [];
+    let t = 0;
+    for (let i = 0; i < message.length; i++) {
+      message = message.toUpperCase();
+      key = key.toUpperCase();
+      if (message[i].match(/[A-Z]/)) {
+        if (message.indexOf(message[i]) < 0) {
+          resultArr.push(
+            String.fromCodePoint(
+              ((message[i].charCodeAt(0) -
+                "A".charCodeAt(0) +
+                (26 -
+                  (key[t % key.length].charCodeAt(0) - "A".charCodeAt(0)))) %
+                26) +
+                "A".charCodeAt(0)
+            )
+          );
+        } else {
+          resultArr.push(
+            String.fromCodePoint(
+              ((message[i].charCodeAt(0) -
+                "A".charCodeAt(0) +
+                (key[t % key.length].charCodeAt(0) - "A".charCodeAt(0))) %
+                26) +
+                "A".charCodeAt(0)
+            )
+          );
+        }
+        t++;
+      } else {
+        resultArr.push(message[i]);
+      }
+    }
+    return this.bool === false
+      ? resultArr.reverse().join("")
+      : resultArr.join("");
+  }
+
+  decrypt(encryptedMessage, key) {
+    if (encryptedMessage === undefined || key === undefined) {
+      throw new Error("Error");
+    }
+    let result = [];
+    let t = 0;
+    for (let i = 0; i < encryptedMessage.length; i++) {
+      encryptedMessage = encryptedMessage.toUpperCase();
+      key = key.toUpperCase();
+      if (encryptedMessage[i].match(/[A-Z]/)) {
+        if (encryptedMessage.indexOf(encryptedMessage[i]) < 0) {
+          result.push(
+            String.fromCodePoint(
+              ((encryptedMessage[i].charCodeAt(0) -
+                "A".charCodeAt(0) +
+                (key[t % key.length].charCodeAt(0) - "A".charCodeAt(0))) %
+                26) +
+                "A".charCodeAt(0)
+            )
+          );
+        } else {
+          result.push(
+            String.fromCodePoint(
+              ((encryptedMessage[i].charCodeAt(0) -
+                "A".charCodeAt(0) +
+                (26 -
+                  (key[t % key.length].charCodeAt(0) - "A".charCodeAt(0)))) %
+                26) +
+                "A".charCodeAt(0)
+            )
+          );
+        }
+        t++;
+      } else {
+        result.push(encryptedMessage[i]);
+      }
+    }
+    return this.bool === false ? result.reverse().join("") : result.join("");
   }
 }
-
 module.exports = VigenereCipheringMachine;

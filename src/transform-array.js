@@ -1,24 +1,33 @@
 module.exports = function transform(arr) {
-  if (Array.isArray(arr) && arr.length) {
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i] === "--discard-next") {
-        if (i >= arr.length) throw Error;
-        arr.splice(i, 2);
-        i -= 2;
-      } else if (arr[i] === "--discard-next") {
-        if (i === 0) throw Error;
-        arr.splice(i - 1, 2);
-        i -= 2;
-      } else if (arr[i] === "--double-next") {
-        if (i >= arr.length) throw Error;
-        arr.splice(i, 1, arr[i + 1]);
-      } else if (arr[i] === "--double-prev") {
-        if (i === 0) throw Error;
-        arr.splice(i, 1, arr[i - 1]);
-      }
+if (!Array.isArray(arr)) throw new Error();
+
+  let result = [];
+  for (i = 0; i < arr.length; i++) {
+    switch (arr[i]) {
+      case "--discard-next":
+      case "--discard-prev":
+      case "--double-next":
+      case "--double-prev":
+        continue;
     }
-    return arr;
-  } else {
-    throw Error;
+    result.push(arr[i]);
+
+    switch (arr[i + 1]) {
+      case "--double-prev":
+        result.push(arr[i]);
+        break;
+      case "--discard-prev":
+        result.splice(result.length - 1, 1);
+        break;
+    }
+    switch (arr[i - 1]) {
+      case "--double-next":
+        result.push(arr[i]);
+        break;
+      case "--discard-next":
+        result.splice(result.length - 1, 1);
+        break;
+    }
   }
+  return result;
 };
