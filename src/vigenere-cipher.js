@@ -1,4 +1,4 @@
-class VigenereCipheringMachine {
+/* class VigenereCipheringMachine {
 
     constructor(direct){
         this.direct = direct === false ? false : true; 
@@ -41,6 +41,21 @@ class VigenereCipheringMachine {
     isLowercase(c) {
     	return 97 <= c && c <= 122;  // 97 is character code for 'a'. 122 is 'z'.
     }
+}
+
+module.exports = VigenereCipheringMachine;
+ */
+
+class VigenereCipheringMachine {
+  encrypt() {
+    throw "Not implemented";
+    // remove line with error and write your code here
+  }
+
+  decrypt() {
+    throw "Not implemented";
+    // remove line with error and write your code here
+  }
 }
 
 module.exports = VigenereCipheringMachine;
